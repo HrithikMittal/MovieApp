@@ -28,12 +28,28 @@ const tworeducer = (state={fav:[]},action)=>{
         fav:[...action.payload]
       }
       break;
+      case "REMOVE":
+         state = {
+           movies:[...action.payload]
+         }
+         break;
   }
   return state;
 };
 
+const threereducer = (state={searchmovies:[]},action)=>{
+  switch(action.type){
+    case "SEARCH":
+      state = {
+        searchmovies:[action.payload]
+      }
+      break;
 
-const store = createStore(combineReducers({movies:onereducer,fav:tworeducer}))
+  }
+  return state;
+};
+
+const store = createStore(combineReducers({movies:onereducer,fav:tworeducer,search:threereducer}))
 
 store.subscribe(()=>{
 })

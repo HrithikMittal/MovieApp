@@ -35,6 +35,21 @@ class Item extends React.Component{
         })
     }
 
+    checkDup(id){
+        this.props.movies.movies.forEach((fav, index, arr)=>{
+            if(fav.imdbID ===id && fav.isFav){
+                return index
+            }
+        })  
+    }
+    remFavorite(e,rem){
+        rem.movies.movies.splice(this.checkDup(e.target.id),1);
+
+        this.props.store.dispatch({
+            type:"REMOVE",
+            payload:rem.movies.movies
+          })
+    }
    
     renderMovieItems(){
         return this.props.movies.movies.map(movie =>( <div key={movie.imdbID} style={this.styles.card}>

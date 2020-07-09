@@ -1,19 +1,22 @@
-import React,{ useState } from 'react';
+import React from 'react';
 import axios from 'axios';
-
+import {useSelector} from 'react-redux'
 export default function Navbar(props){
-    const [searchmovies, setSearchMovies] = useState();
+    const searchmovies = useSelector(state=>state.search.searchmovies);
     function searchMovie(e){
+
         axios.get(`http://www.omdbapi.com/?apikey=90bfa9a&s=${e.target.value}`)
         .then(res => {
-          const searchmovies = res.data;
-          setSearchMovies({ searchmovies });
+          const searchmovie1 = res.data;
+            props.store.dispatch({
+            type:"SEARCH",
+            payload:searchmovie1
+          })
         })
     }
     function clearSearch(e){
         e.target.value = ""
     }
-    
     function addMovie(e){
         var check=false;
         var state = props.store.getState();
@@ -37,13 +40,13 @@ export default function Navbar(props){
     
     function renderSearchMovies(){
   
+        if(searchmovies[0]){
 
-        if(searchmovies){
-
-            if(searchmovies.searchmovies.Response==="True"){
+            if(searchmovies[0].Response==="True"){
 
 
-        return searchmovies.searchmovies.Search.map(movie =>(<div key={movie.imdbID} style={styles.card}>
+        return searchmovies[0].Search.map(movie =>(<div key={movie.imdbID} style={styles.card}>
+            
             <div style={styles.image}>
             <img style={{width:"100%",height:"100%"}} alt={movie.name} src={movie.Poster} />
             </div>
@@ -99,7 +102,6 @@ export default function Navbar(props){
         dropdown:{
             display: "inline-block",
             width:"70%",
-            
             paddingLeft:10,
             
             paddingRight:10,
@@ -143,6 +145,7 @@ export default function Navbar(props){
         <div>
             <div>
                 <div style={styles.nav} >
+                  
                 </div>
                 <input style={styles.navinp} placeholder="Search..." onChange={searchMovie} onFocusOut={clearSearch} type="text" name="search" id="search" />
                
@@ -154,5 +157,4 @@ export default function Navbar(props){
         </div>
     )
 
-   
-}
+    }
