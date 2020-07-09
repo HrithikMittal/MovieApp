@@ -1,36 +1,24 @@
 import React,{ useState } from 'react';
 import axios from 'axios';
-import ReactDOM from 'react-dom';
-import { render } from '@testing-library/react';
 
 export default function Navbar(props){
-    // http://www.omdbapi.com/?apikey=90bfa9a&s=Aquaman
     const [searchmovies, setSearchMovies] = useState();
     function searchMovie(e){
         axios.get(`http://www.omdbapi.com/?apikey=90bfa9a&s=${e.target.value}`)
         .then(res => {
           const searchmovies = res.data;
           setSearchMovies({ searchmovies });
-          
-        //   ReactDOM.render(
-        //     renderSearchMovies(),
-        //     document.getElementById('search')
-        //   );
-          
         })
     }
     function clearSearch(e){
         e.target.value = ""
     }
-    function removeDuplicates(data){
-        return data.fiter((value,index) => data.indexOf(value) === index)
-    }
+    
     function addMovie(e){
         var check=false;
-        console.log("Hello");
         var state = props.store.getState();
         state.movies.movies.forEach((movie) => {
-            if(movie.imdbID ==e.target.id){
+            if(movie.imdbID ===e.target.id){
                 check=true
             }
         })
@@ -39,7 +27,6 @@ export default function Navbar(props){
         .then(res => {
             const searchmovie = res.data;
             
-        //   console.log(searchmovie)
             props.store.dispatch({
             type:"ADDMOVIE",
             payload:searchmovie
@@ -52,14 +39,13 @@ export default function Navbar(props){
   
 
         if(searchmovies){
-        console.log(searchmovies.searchmovies.Response)
 
-            if(searchmovies.searchmovies.Response=="True"){
+            if(searchmovies.searchmovies.Response==="True"){
 
 
-        return searchmovies.searchmovies.Search.map(movie =>(<div style={styles.card}>
+        return searchmovies.searchmovies.Search.map(movie =>(<div key={movie.imdbID} style={styles.card}>
             <div style={styles.image}>
-            <img style={{width:"100%",height:"100%"}} src={movie.Poster} />
+            <img style={{width:"100%",height:"100%"}} alt={movie.name} src={movie.Poster} />
             </div>
             <div style={styles.content}>
                 <h1>{movie.Title}</h1>
@@ -112,16 +98,7 @@ export default function Navbar(props){
         },
         dropdown:{
             display: "inline-block",
-            // position:"absolute",
-            // width:"40%",
-            // height:"100px",
-            // top:50,
-            // backgroundColor:"pink",
-            // marginLeft:"11rem",
-            // marginRight:"11rem",
             width:"70%",
-            // height:30,
-            // border:0,
             
             paddingLeft:10,
             
@@ -166,8 +143,6 @@ export default function Navbar(props){
         <div>
             <div>
                 <div style={styles.nav} >
-                  
-                    {/* <div style={styles.dropdown}></div> */}
                 </div>
                 <input style={styles.navinp} placeholder="Search..." onChange={searchMovie} onFocusOut={clearSearch} type="text" name="search" id="search" />
                

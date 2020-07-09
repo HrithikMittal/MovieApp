@@ -11,8 +11,7 @@ const onereducer = (state={movies:[]},action)=>{
       state = {
           movies:[...state.movies,action.payload],
       }
-      
-      // state.movies.push(action.payload)
+
       break;
   }
   return state;
@@ -37,8 +36,6 @@ const tworeducer = (state={fav:[]},action)=>{
 const store = createStore(combineReducers({movies:onereducer,fav:tworeducer}))
 
 store.subscribe(()=>{
-console.log("State")
-console.log(store.getState())
 })
 
 ReactDOM.render(
